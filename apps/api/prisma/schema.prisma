@@ -1,0 +1,484 @@
+// Carpooling App — Full Prisma Schema
+// Data model reference: carpooling-datamodel.docx
+// PostGIS GIST indexes must be added via raw SQL migration (not supported by Prisma)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Gender {
+  male
+  female
+  other
+  prefer_not_to_say
+}
+
+enum Role {
+  user
+  admin
+  superadmin
+}
+
+enum ChatPreference {
+  silent
+  sometimes
+  love_to_chat
+}
+
+enum RideStatus {
+  draft
+  published
+  full
+  in_progress
+  completed
+  cancelled
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  rejected
+  cancelled
+  completed
+}
+
+enum PaymentMethod {
+  cash
+  card
+  mobile_wallet
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  refunded
+}
+
+enum MessageType {
+  text
+  system
+}
+
+enum ReportTargetType {
+  user
+  ride
+  review
+  message
+}
+
+enum ReportReason {
+  inappropriate_behavior
+  fake_profile
+  fake_ride
+  harassment
+  spam
+  abusive_review
+  other
+}
+
+enum ReportStatus {
+  pending
+  reviewed
+  resolved
+  dismissed
+}
+
+enum NotificationType {
+  booking_request
+  booking_confirmed
+  booking_rejected
+  booking_cancelled
+  ride_started
+  ride_completed
+  new_message
+  new_review
+  ride_alert
+  account_verified
+  account_blocked
+  system
+}
+
+enum NotificationEntityType {
+  booking
+  ride
+  message
+  review
+  user
+  conversation
+}
+
+enum BlockReason {
+  uncomfortable
+  harassment
+  no_show
+  inappropriate_messages
+  other
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id                    String    @id @default(uuid()) @db.Uuid
+  phone                 String    @unique @db.VarChar(20)
+  firstName             String    @db.VarChar(50)
+  lastName              String    @db.VarChar(50)
+  fullName              String    @db.VarChar(100)
+  avatarUrl             String?
+  gender                Gender?
+  bio                   String?
+  city                  String?   @db.VarChar(100)
+  preferredLanguage     String    @default("fr") @db.VarChar(10)
+  ratingAsDriver        Decimal   @default(0.0) @db.Decimal(2, 1)
+  ratingAsPassenger     Decimal   @default(0.0) @db.Decimal(2, 1)
+  totalRidesAsDriver    Int       @default(0)
+  totalRidesAsPassenger Int       @default(0)
+  isPhoneVerified       Boolean   @default(false)
+  phoneVerifiedAt       DateTime? @db.Timestamptz
+  isBlocked             Boolean   @default(false)
+  blockedAt             DateTime? @db.Timestamptz
+  blockReason           String?
+  deletedAt             DateTime? @db.Timestamptz
+  role                  Role      @default(user)
+  createdAt             DateTime  @default(now()) @db.Timestamptz
+  updatedAt             DateTime  @updatedAt @db.Timestamptz
+
+  // Relations
+  driverProfile         DriverProfile?
+  vehicles              Vehicle[]
+  rides                 Ride[]
+  bookings              Booking[]                  @relation("PassengerBookings")
+  bookingCancellations  Booking[]                  @relation("BookingCancelledBy")
+  reviewsGiven          Review[]                   @relation("ReviewsGiven")
+  reviewsReceived       Review[]                   @relation("ReviewsReceived")
+  notifications         Notification[]
+  favoriteRoutes        FavoriteRoute[]
+  recentSearches        RecentSearch[]
+  blocksInitiated       UserBlock[]                @relation("BlocksInitiated")
+  blocksReceived        UserBlock[]                @relation("BlocksReceived")
+  reportsMade           Report[]                   @relation("ReportsMade")
+  reportsReviewed       Report[]                   @relation("ReportsReviewed")
+  conversationsAsDriver Conversation[]             @relation("ConversationsAsDriver")
+  conversationsAsPassenger Conversation[]          @relation("ConversationsAsPassenger")
+  sentMessages          Message[]
+
+  @@map("users")
+}
+
+model DriverProfile {
+  userId              String         @id @db.Uuid
+  licenseNumber       String?        @db.VarChar(50)
+  licensePhotoUrl     String?
+  isLicenseVerified   Boolean        @default(false)
+  smokingAllowed      Boolean        @default(false)
+  musicAllowed        Boolean        @default(true)
+  chatPreference      ChatPreference?
+  autoApproveBookings Boolean        @default(false)
+  createdAt           DateTime       @default(now()) @db.Timestamptz
+  updatedAt           DateTime       @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("driver_profiles")
+}
+
+model Vehicle {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid
+  make         String   @db.VarChar(50)
+  model        String   @db.VarChar(50)
+  year         Int      @db.SmallInt
+  color        String   @db.VarChar(30)
+  licensePlate String   @unique @db.VarChar(20)
+  totalSeats   Int      @db.SmallInt
+  photoUrl     String?
+  isVerified   Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @updatedAt @db.Timestamptz
+
+  user  User   @relation(fields: [userId], references: [id])
+  rides Ride[]
+
+  @@map("vehicles")
+}
+
+model Ride {
+  id                 String     @id @default(uuid()) @db.Uuid
+  driverId           String     @db.Uuid
+  vehicleId          String     @db.Uuid
+  originLabel        String     @db.VarChar(200)
+  originLocation     Unsupported("geography(Point,4326)")
+  destinationLabel   String     @db.VarChar(200)
+  destinationLocation Unsupported("geography(Point,4326)")
+  departureAt        DateTime   @db.Timestamptz
+  estimatedArrivalAt DateTime?  @db.Timestamptz
+  seatsOffered       Int        @db.SmallInt
+  seatsAvailable     Int        @db.SmallInt
+  pricePerSeat       Decimal    @db.Decimal(8, 2)
+  currency           String     @default("MAD") @db.VarChar(3)
+  distanceKm         Decimal?   @db.Decimal(6, 1)
+  durationMin        Int?       @db.SmallInt
+  polyline           String?
+  status             RideStatus @default(published)
+  cancelledAt        DateTime?  @db.Timestamptz
+  cancellationReason String?
+  createdAt          DateTime   @default(now()) @db.Timestamptz
+  updatedAt          DateTime   @updatedAt @db.Timestamptz
+
+  driver        User           @relation(fields: [driverId], references: [id])
+  vehicle       Vehicle        @relation(fields: [vehicleId], references: [id])
+  stops         RideStop[]
+  bookings      Booking[]
+  reviews       Review[]
+  conversations Conversation[]
+
+  @@index([status], map: "idx_rides_status")
+  @@index([departureAt], map: "idx_rides_departure")
+  @@index([driverId], map: "idx_rides_driver")
+  // PostGIS GIST indexes — add via raw SQL migration:
+  // CREATE INDEX idx_rides_origin_geo ON rides USING GIST(origin_location);
+  // CREATE INDEX idx_rides_destination_geo ON rides USING GIST(destination_location);
+
+  @@map("rides")
+}
+
+model RideStop {
+  id              String   @id @default(uuid()) @db.Uuid
+  rideId          String   @db.Uuid
+  orderIndex      Int      @db.SmallInt
+  label           String   @db.VarChar(200)
+  location        Unsupported("geography(Point,4326)")
+  arrivesAt       DateTime? @db.Timestamptz
+  priceFromOrigin Decimal?  @db.Decimal(8, 2)
+  createdAt       DateTime  @default(now()) @db.Timestamptz
+
+  ride              Ride      @relation(fields: [rideId], references: [id])
+  pickupBookings    Booking[] @relation("PickupStop")
+  dropoffBookings   Booking[] @relation("DropoffStop")
+
+  @@unique([rideId, orderIndex])
+  @@index([rideId, orderIndex], map: "idx_stops_ride")
+  // CREATE INDEX idx_stops_location ON ride_stops USING GIST(location);
+
+  @@map("ride_stops")
+}
+
+model Booking {
+  id                 String        @id @default(uuid()) @db.Uuid
+  rideId             String        @db.Uuid
+  passengerId        String        @db.Uuid
+  pickupStopId       String        @db.Uuid
+  dropoffStopId      String        @db.Uuid
+  seatsReserved      Int           @default(1) @db.SmallInt
+  pricePerSeat       Decimal       @db.Decimal(8, 2)
+  totalPrice         Decimal       @db.Decimal(8, 2)
+  currency           String        @default("MAD") @db.VarChar(3)
+  paymentMethod      PaymentMethod @default(cash)
+  paymentStatus      PaymentStatus @default(pending)
+  status             BookingStatus @default(pending)
+  confirmedAt        DateTime?     @db.Timestamptz
+  cancelledAt        DateTime?     @db.Timestamptz
+  cancelledBy        String?       @db.Uuid
+  cancellationReason String?
+  createdAt          DateTime      @default(now()) @db.Timestamptz
+  updatedAt          DateTime      @updatedAt @db.Timestamptz
+
+  ride         Ride         @relation(fields: [rideId], references: [id])
+  passenger    User         @relation("PassengerBookings", fields: [passengerId], references: [id])
+  cancelledByUser User?     @relation("BookingCancelledBy", fields: [cancelledBy], references: [id])
+  pickupStop   RideStop     @relation("PickupStop", fields: [pickupStopId], references: [id])
+  dropoffStop  RideStop     @relation("DropoffStop", fields: [dropoffStopId], references: [id])
+  reviews      Review[]
+  conversation Conversation?
+
+  @@index([rideId], map: "idx_bookings_ride")
+  @@index([passengerId], map: "idx_bookings_passenger")
+  @@index([rideId, status], map: "idx_bookings_ride_status")
+
+  @@map("bookings")
+}
+
+model Review {
+  id          String   @id @default(uuid()) @db.Uuid
+  bookingId   String   @db.Uuid
+  rideId      String   @db.Uuid
+  reviewerId  String   @db.Uuid
+  revieweeId  String   @db.Uuid
+  rating      Int      @db.SmallInt
+  comment     String?
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now()) @db.Timestamptz
+  updatedAt   DateTime @updatedAt @db.Timestamptz
+
+  booking  Booking @relation(fields: [bookingId], references: [id])
+  ride     Ride    @relation(fields: [rideId], references: [id])
+  reviewer User    @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewee User    @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+
+  @@unique([bookingId, reviewerId])
+
+  @@map("reviews")
+}
+
+model Conversation {
+  id                    String   @id @default(uuid()) @db.Uuid
+  bookingId             String   @unique @db.Uuid
+  rideId                String   @db.Uuid
+  driverId              String   @db.Uuid
+  passengerId           String   @db.Uuid
+  lastMessageAt         DateTime? @db.Timestamptz
+  lastMessagePreview    String?   @db.VarChar(100)
+  driverUnreadCount     Int       @default(0) @db.SmallInt
+  passengerUnreadCount  Int       @default(0) @db.SmallInt
+  isActive              Boolean   @default(true)
+  createdAt             DateTime  @default(now()) @db.Timestamptz
+  updatedAt             DateTime  @updatedAt @db.Timestamptz
+
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  ride      Ride     @relation(fields: [rideId], references: [id])
+  driver    User     @relation("ConversationsAsDriver", fields: [driverId], references: [id])
+  passenger User     @relation("ConversationsAsPassenger", fields: [passengerId], references: [id])
+  messages  Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id                String      @id @default(uuid()) @db.Uuid
+  conversationId    String      @db.Uuid
+  senderId          String      @db.Uuid
+  body              String
+  messageType       MessageType @default(text)
+  isRead            Boolean     @default(false)
+  readAt            DateTime?   @db.Timestamptz
+  deletedBySender   Boolean     @default(false)
+  deletedByReceiver Boolean     @default(false)
+  createdAt         DateTime    @default(now()) @db.Timestamptz
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  sender       User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt(sort: Asc)], map: "idx_messages_conversation")
+
+  @@map("messages")
+}
+
+model Report {
+  id             String           @id @default(uuid()) @db.Uuid
+  reporterId     String           @db.Uuid
+  targetType     ReportTargetType
+  targetId       String           @db.Uuid
+  reason         ReportReason
+  description    String?
+  status         ReportStatus     @default(pending)
+  reviewedBy     String?          @db.Uuid
+  reviewedAt     DateTime?        @db.Timestamptz
+  resolutionNote String?
+  createdAt      DateTime         @default(now()) @db.Timestamptz
+  updatedAt      DateTime         @updatedAt @db.Timestamptz
+
+  reporter User  @relation("ReportsMade", fields: [reporterId], references: [id])
+  reviewer User? @relation("ReportsReviewed", fields: [reviewedBy], references: [id])
+
+  @@unique([reporterId, targetType, targetId])
+
+  @@map("reports")
+}
+
+model UserBlock {
+  id        String       @id @default(uuid()) @db.Uuid
+  blockerId String       @db.Uuid
+  blockedId String       @db.Uuid
+  reason    BlockReason?
+  createdAt DateTime     @default(now()) @db.Timestamptz
+
+  blocker User @relation("BlocksInitiated", fields: [blockerId], references: [id])
+  blocked User @relation("BlocksReceived", fields: [blockedId], references: [id])
+
+  @@unique([blockerId, blockedId])
+
+  @@map("user_blocks")
+}
+
+model FavoriteRoute {
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @db.Uuid
+  originLabel         String   @db.VarChar(200)
+  originLocation      Unsupported("geography(Point,4326)")
+  destinationLabel    String   @db.VarChar(200)
+  destinationLocation Unsupported("geography(Point,4326)")
+  nickname            String?  @db.VarChar(100)
+  alertsEnabled       Boolean  @default(false)
+  alertRadiusKm       Int?     @default(10) @db.SmallInt
+  alertDays           Int[]
+  alertTimeFrom       DateTime? @db.Time
+  alertTimeTo         DateTime? @db.Time
+  createdAt           DateTime  @default(now()) @db.Timestamptz
+  updatedAt           DateTime  @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, originLabel, destinationLabel])
+  @@index([userId], map: "idx_fav_routes_user")
+  // CREATE INDEX idx_fav_routes_origin_geo ON favorite_routes USING GIST(origin_location);
+  // CREATE INDEX idx_fav_routes_dest_geo ON favorite_routes USING GIST(destination_location);
+  // CREATE INDEX idx_fav_routes_alerts ON favorite_routes(alerts_enabled) WHERE alerts_enabled = TRUE;
+
+  @@map("favorite_routes")
+}
+
+model RecentSearch {
+  id                  String   @id @default(uuid()) @db.Uuid
+  userId              String   @db.Uuid
+  originLabel         String   @db.VarChar(200)
+  originLocation      Unsupported("geography(Point,4326)")
+  destinationLabel    String   @db.VarChar(200)
+  destinationLocation Unsupported("geography(Point,4326)")
+  departureDate       DateTime? @db.Date
+  seatsNeeded         Int       @default(1) @db.SmallInt
+  searchCount         Int       @default(1) @db.SmallInt
+  lastSearchedAt      DateTime  @default(now()) @db.Timestamptz
+  createdAt           DateTime  @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, originLabel, destinationLabel])
+
+  @@map("recent_searches")
+}
+
+model Notification {
+  id         String                  @id @default(uuid()) @db.Uuid
+  userId     String                  @db.Uuid
+  type       NotificationType
+  title      String                  @db.VarChar(100)
+  body       String                  @db.VarChar(255)
+  entityType NotificationEntityType?
+  entityId   String?                 @db.Uuid
+  isRead     Boolean                 @default(false)
+  readAt     DateTime?               @db.Timestamptz
+  pushSent   Boolean                 @default(false)
+  pushSentAt DateTime?               @db.Timestamptz
+  createdAt  DateTime                @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt(sort: Desc)], map: "idx_notifications_user")
+  // Partial index (alerts_enabled = TRUE) must be added via raw SQL:
+  // CREATE INDEX idx_notifications_unread ON notifications(user_id, is_read) WHERE is_read = FALSE;
+
+  @@map("notifications")
+}

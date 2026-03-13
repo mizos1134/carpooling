@@ -1,0 +1,17 @@
+{
+  "name": "@carpooling/shared",
+  "version": "0.0.1",
+  "description": "Shared TypeScript types and Zod schemas",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "private": true
+}
