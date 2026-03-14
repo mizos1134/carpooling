@@ -1,4 +1,4 @@
-import { GeoPoint } from './common.js';
+import { GeoPoint } from './common';
 
 export enum RideStatus {
   Draft = 'draft',

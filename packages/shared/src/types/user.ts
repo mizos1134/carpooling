@@ -1,4 +1,4 @@
-import { Gender, Role, ChatPreference } from './common.js';
+import { Gender, Role, ChatPreference } from './common';
 
 export interface User {
   id: string;

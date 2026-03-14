@@ -1,4 +1,4 @@
-import { PaymentMethod, PaymentStatus } from './common.js';
+import { PaymentMethod, PaymentStatus } from './common';
 
 export enum BookingStatus {
   Pending = 'pending',
