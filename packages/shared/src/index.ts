@@ -7,3 +7,4 @@ export * from './types/chat';
 export * from './types/notification';
 export * from './types/report';
 export * from './schemas/auth';
+export * from './schemas/user';

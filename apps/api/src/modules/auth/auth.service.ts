@@ -60,6 +60,10 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         avatarUrl: user.avatarUrl,
+        gender: user.gender,
+        bio: user.bio,
+        city: user.city,
+        preferredLanguage: user.preferredLanguage,
       },
     };
   }
