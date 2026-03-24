@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { MainTabParamList } from './types';
 
 import SearchStack from './search-stack';
@@ -44,15 +45,17 @@ function TabBarIcon({ routeName, focused }: { routeName: string; focused: boolea
 
 export default function MainTabs() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = 56 + insets.bottom;
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          paddingBottom: 6,
+          paddingBottom: insets.bottom,
           paddingTop: 8,
-          height: 64,
+          height: tabBarHeight,
           borderTopColor: '#E5E7EB',
         },
         tabBarLabelStyle: {
