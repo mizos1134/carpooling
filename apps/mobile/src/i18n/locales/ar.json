@@ -26,6 +26,44 @@
     "results": "النتائج",
     "noResults": "لا توجد نتائج"
   },
+  "rides": {
+    "searchResults": "النتائج",
+    "noRidesFound": "لا توجد رحلات",
+    "noRidesFoundSubtitle": "جرّب تاريخًا أو وجهة مختلفة",
+    "sortDeparture": "المغادرة",
+    "sortPrice": "السعر",
+    "sortRating": "التقييم",
+    "seatsLeft": "مقعد متبقي",
+    "seatsLeftPlural": "مقاعد متبقية",
+    "perSeat": "/ مقعد"
+  },
+  "rideDetail": {
+    "seatsAvailable": "مقاعد متاحة",
+    "memberSince": "عضو منذ",
+    "verified": "الهاتف موثّق",
+    "smoking": "التدخين مسموح",
+    "noSmoking": "ممنوع التدخين",
+    "music": "الموسيقى",
+    "noMusic": "بدون موسيقى",
+    "chatLoveTo": "يحب الحديث",
+    "chatSometimes": "أحيانًا",
+    "chatSilent": "صامت",
+    "book": "احجز"
+  },
+  "booking": {
+    "confirmTitle": "تأكيد الحجز",
+    "pickupPoint": "نقطة الانطلاق",
+    "dropoffPoint": "نقطة الوصول",
+    "seats": "عدد المقاعد",
+    "priceBreakdown": "تفاصيل السعر",
+    "total": "المجموع",
+    "paymentCash": "نقدًا — ادفع مباشرةً للسائق",
+    "confirmButton": "تأكيد الحجز",
+    "successTitle": "تم إرسال الطلب!",
+    "successSubtitle": "يجب على السائق تأكيد حجزك.",
+    "viewBooking": "عرض حجزي",
+    "backToSearch": "العودة إلى البحث"
+  },
   "profile": {
     "unnamed": "مستخدم",
     "account": "الحساب",

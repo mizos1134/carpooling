@@ -6,9 +6,13 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../../components/layout';
 import { RecentSearchCard } from '../../components/cards';
 import { useRideStore } from '../../store/rides';
-import type { MainNavigatorParamList } from '../../navigation/types';
+import type { MainNavigatorParamList, SearchStackParamList } from '../../navigation/types';
+import { CompositeNavigationProp } from '@react-navigation/native';
 
-type NavProp = NativeStackNavigationProp<MainNavigatorParamList>;
+type NavProp = CompositeNavigationProp<
+  NativeStackNavigationProp<SearchStackParamList, 'SearchHome'>,
+  NativeStackNavigationProp<MainNavigatorParamList>
+>;
 
 export default function SearchHomeScreen() {
   const { t } = useTranslation();
@@ -20,7 +24,17 @@ export default function SearchHomeScreen() {
   };
 
   const handleSearch = () => {
-    // TODO: Navigate to SearchResults when built in M5
+    if (!searchParams.origin || !searchParams.destination) return;
+    navigation.navigate('SearchResults', {
+      originLabel: searchParams.origin.label,
+      destinationLabel: searchParams.destination.label,
+      originLat: searchParams.origin.lat,
+      originLng: searchParams.origin.lng,
+      destLat: searchParams.destination.lat,
+      destLng: searchParams.destination.lng,
+      date: searchParams.date,
+      passengers: searchParams.passengers,
+    });
   };
 
   const isSearchReady = searchParams.origin && searchParams.destination;

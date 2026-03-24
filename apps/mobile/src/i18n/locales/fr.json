@@ -26,6 +26,44 @@
     "results": "Résultats",
     "noResults": "Aucun résultat"
   },
+  "rides": {
+    "searchResults": "Résultats",
+    "noRidesFound": "Aucun trajet trouvé",
+    "noRidesFoundSubtitle": "Essayez une autre date ou destination",
+    "sortDeparture": "Départ",
+    "sortPrice": "Prix",
+    "sortRating": "Note",
+    "seatsLeft": "place restante",
+    "seatsLeftPlural": "places restantes",
+    "perSeat": "/ siège"
+  },
+  "rideDetail": {
+    "seatsAvailable": "sièges disponibles",
+    "memberSince": "Membre depuis",
+    "verified": "Téléphone vérifié",
+    "smoking": "Fumeur",
+    "noSmoking": "Non-fumeur",
+    "music": "Musique",
+    "noMusic": "Sans musique",
+    "chatLoveTo": "Adore bavarder",
+    "chatSometimes": "Parfois",
+    "chatSilent": "Silencieux",
+    "book": "Réserver"
+  },
+  "booking": {
+    "confirmTitle": "Confirmer la réservation",
+    "pickupPoint": "Point de départ",
+    "dropoffPoint": "Point d'arrivée",
+    "seats": "Nombre de sièges",
+    "priceBreakdown": "Détail du prix",
+    "total": "Total",
+    "paymentCash": "En espèces — Payez directement au conducteur",
+    "confirmButton": "Confirmer la réservation",
+    "successTitle": "Demande envoyée !",
+    "successSubtitle": "Le conducteur doit confirmer votre réservation.",
+    "viewBooking": "Voir ma réservation",
+    "backToSearch": "Retour à la recherche"
+  },
   "profile": {
     "unnamed": "Utilisateur",
     "account": "Compte",
