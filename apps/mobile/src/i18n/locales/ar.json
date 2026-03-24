@@ -17,6 +17,13 @@
     "recentSearches": "عمليات البحث الأخيرة",
     "noRecentSearches": "لا توجد عمليات بحث حديثة"
   },
+  "locationPicker": {
+    "searchPlaceholder": "ابحث عن مدينة...",
+    "clear": "مسح",
+    "popularCities": "المدن الشائعة",
+    "results": "النتائج",
+    "noResults": "لا توجد نتائج"
+  },
   "profile": {
     "unnamed": "مستخدم",
     "account": "الحساب",

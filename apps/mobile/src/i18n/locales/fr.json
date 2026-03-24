@@ -17,6 +17,13 @@
     "recentSearches": "Recherches récentes",
     "noRecentSearches": "Aucune recherche récente"
   },
+  "locationPicker": {
+    "searchPlaceholder": "Rechercher une ville...",
+    "clear": "Effacer",
+    "popularCities": "Villes populaires",
+    "results": "Résultats",
+    "noResults": "Aucun résultat"
+  },
   "profile": {
     "unnamed": "Utilisateur",
     "account": "Compte",
