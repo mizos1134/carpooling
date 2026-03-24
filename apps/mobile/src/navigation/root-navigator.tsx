@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuthStore } from '../store/auth';
 import AuthStack from './auth-stack';
-import MainStack from './main-stack';
+import MainNavigator from './main-navigator';
 
 export default function RootNavigator() {
   const { token, isHydrated, hydrate } = useAuthStore();
@@ -19,5 +19,5 @@ export default function RootNavigator() {
     );
   }
 
-  return token ? <MainStack /> : <AuthStack />;
+  return token ? <MainNavigator /> : <AuthStack />;
 }

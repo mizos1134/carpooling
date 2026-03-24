@@ -1,1 +1,32 @@
-{}
+{
+  "tabs": {
+    "search": "Rechercher",
+    "publish": "Publier",
+    "yourRides": "Vos trajets",
+    "inbox": "Boîte de réception",
+    "profile": "Profil"
+  },
+  "search": {
+    "title": "Où allez-vous ?",
+    "leavingFrom": "Départ de...",
+    "goingTo": "Destination...",
+    "today": "Aujourd'hui",
+    "passenger": "passager",
+    "passengers": "passagers",
+    "searchButton": "Rechercher",
+    "recentSearches": "Recherches récentes",
+    "noRecentSearches": "Aucune recherche récente"
+  },
+  "profile": {
+    "unnamed": "Utilisateur",
+    "account": "Compte",
+    "editProfile": "Modifier le profil",
+    "driverProfile": "Profil conducteur",
+    "myVehicles": "Mes véhicules",
+    "activity": "Activité",
+    "myReviews": "Mes avis",
+    "settings": "Paramètres",
+    "settingsPage": "Paramètres",
+    "logout": "Déconnexion"
+  }
+}

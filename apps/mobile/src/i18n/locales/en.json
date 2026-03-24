@@ -1,1 +1,32 @@
-{}
+{
+  "tabs": {
+    "search": "Search",
+    "publish": "Publish",
+    "yourRides": "Your rides",
+    "inbox": "Inbox",
+    "profile": "Profile"
+  },
+  "search": {
+    "title": "Where are you going?",
+    "leavingFrom": "Leaving from...",
+    "goingTo": "Going to...",
+    "today": "Today",
+    "passenger": "passenger",
+    "passengers": "passengers",
+    "searchButton": "Search",
+    "recentSearches": "Recent searches",
+    "noRecentSearches": "No recent searches"
+  },
+  "profile": {
+    "unnamed": "User",
+    "account": "Account",
+    "editProfile": "Edit profile",
+    "driverProfile": "Driver profile",
+    "myVehicles": "My vehicles",
+    "activity": "Activity",
+    "myReviews": "My reviews",
+    "settings": "Settings",
+    "settingsPage": "Settings",
+    "logout": "Log out"
+  }
+}

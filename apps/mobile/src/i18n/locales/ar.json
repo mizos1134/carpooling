@@ -1,1 +1,32 @@
-{}
+{
+  "tabs": {
+    "search": "بحث",
+    "publish": "نشر",
+    "yourRides": "رحلاتك",
+    "inbox": "البريد",
+    "profile": "الملف"
+  },
+  "search": {
+    "title": "إلى أين أنت ذاهب؟",
+    "leavingFrom": "الانطلاق من...",
+    "goingTo": "الوجهة...",
+    "today": "اليوم",
+    "passenger": "راكب",
+    "passengers": "ركاب",
+    "searchButton": "بحث",
+    "recentSearches": "عمليات البحث الأخيرة",
+    "noRecentSearches": "لا توجد عمليات بحث حديثة"
+  },
+  "profile": {
+    "unnamed": "مستخدم",
+    "account": "الحساب",
+    "editProfile": "تعديل الملف الشخصي",
+    "driverProfile": "ملف السائق",
+    "myVehicles": "مركباتي",
+    "activity": "النشاط",
+    "myReviews": "تقييماتي",
+    "settings": "الإعدادات",
+    "settingsPage": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  }
+}
