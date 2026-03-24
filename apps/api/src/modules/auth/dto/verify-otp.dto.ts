@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, Length, Matches, MaxLength, MinLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  Length,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class VerifyOtpDto {
   @IsString()

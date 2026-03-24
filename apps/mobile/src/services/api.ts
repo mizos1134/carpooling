@@ -1,7 +1,16 @@
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 import { getItem } from './storage';
 
+function getDevApiUrl(): string {
+  // Expo Go sets the debuggerHost to your dev machine's IP
+  const debuggerHost = Constants.expoConfig?.hostUri ?? Constants.manifest2?.extra?.expoGo?.debuggerHost;
+  const host = debuggerHost?.split(':')[0] ?? 'localhost';
+  return `http://${host}:3000/api/v1`;
+}
+
 const API_BASE_URL = __DEV__
-  ? 'http://localhost:3000/api/v1'
+  ? getDevApiUrl()
   : 'https://your-prod-url.com/api/v1';
 
 async function request<T>(

@@ -19,7 +19,10 @@ export class AuthService {
     return { message: 'OTP sent successfully' };
   }
 
-  async verifyOtp(phone: string, code: string): Promise<{ accessToken: string; user: Record<string, unknown> }> {
+  async verifyOtp(
+    phone: string,
+    code: string,
+  ): Promise<{ accessToken: string; user: Record<string, unknown> }> {
     // Dev mode: accept "000000"
     if (code !== DEV_OTP_CODE) {
       throw new UnauthorizedException('Invalid OTP code');
