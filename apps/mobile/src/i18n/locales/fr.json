@@ -17,14 +17,18 @@
     "passengers": "passagers",
     "searchButton": "Rechercher",
     "recentSearches": "Recherches récentes",
-    "noRecentSearches": "Aucune recherche récente"
+    "noRecentSearches": "Aucune recherche récente",
+    "selectDate": "Choisir une date",
+    "done": "Terminé",
+    "maxPassengers": "Maximum 8 passagers"
   },
   "locationPicker": {
     "searchPlaceholder": "Rechercher une ville...",
     "clear": "Effacer",
     "popularCities": "Villes populaires",
     "results": "Résultats",
-    "noResults": "Aucun résultat"
+    "noResults": "Aucun résultat",
+    "sameCityError": "Le départ et la destination ne peuvent pas être identiques"
   },
   "rides": {
     "searchResults": "Résultats",

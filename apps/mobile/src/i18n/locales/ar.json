@@ -17,14 +17,18 @@
     "passengers": "ركاب",
     "searchButton": "بحث",
     "recentSearches": "عمليات البحث الأخيرة",
-    "noRecentSearches": "لا توجد عمليات بحث حديثة"
+    "noRecentSearches": "لا توجد عمليات بحث حديثة",
+    "selectDate": "اختر تاريخًا",
+    "done": "تم",
+    "maxPassengers": "الحد الأقصى 8 ركاب"
   },
   "locationPicker": {
     "searchPlaceholder": "ابحث عن مدينة...",
     "clear": "مسح",
     "popularCities": "المدن الشائعة",
     "results": "النتائج",
-    "noResults": "لا توجد نتائج"
+    "noResults": "لا توجد نتائج",
+    "sameCityError": "لا يمكن أن يكون الانطلاق والوجهة متماثلين"
   },
   "rides": {
     "searchResults": "النتائج",

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { MainNavigatorParamList } from '../../navigation/types';
 import { useRideStore } from '../../store/rides';
+import { Ionicons } from '@expo/vector-icons';
 
 type Props = NativeStackScreenProps<MainNavigatorParamList, 'LocationPicker'>;
 
@@ -36,7 +37,8 @@ export default function LocationPickerScreen({ navigation, route }: Props) {
   const { t } = useTranslation();
   const { fieldKey } = route.params;
   const [query, setQuery] = useState('');
-  const { setOrigin, setDestination } = useRideStore();
+  const [sameCityError, setSameCityError] = useState(false);
+  const { setOrigin, setDestination, searchParams } = useRideStore();
 
   const filteredCities = query.trim()
     ? POPULAR_CITIES.filter((c) =>
@@ -45,6 +47,15 @@ export default function LocationPickerScreen({ navigation, route }: Props) {
     : POPULAR_CITIES;
 
   const handleSelect = (city: CityItem) => {
+    const oppositeField =
+      fieldKey === 'origin' ? searchParams.destination : searchParams.origin;
+
+    if (oppositeField && city.label === oppositeField.label) {
+      setSameCityError(true);
+      return;
+    }
+
+    setSameCityError(false);
     const selection = { label: city.label, lat: city.lat, lng: city.lng };
 
     if (fieldKey === 'origin') {
@@ -76,7 +87,7 @@ export default function LocationPickerScreen({ navigation, route }: Props) {
         <TextInput
           autoFocus
           value={query}
-          onChangeText={setQuery}
+          onChangeText={(v) => { setQuery(v); setSameCityError(false); }}
           placeholder={t('locationPicker.searchPlaceholder')}
           placeholderTextColor="#9CA3AF"
           className="flex-1 text-base text-gray-900 h-10"
@@ -87,6 +98,16 @@ export default function LocationPickerScreen({ navigation, route }: Props) {
           </Pressable>
         )}
       </View>
+
+      {/* Same-city error banner */}
+      {sameCityError && (
+        <View className="flex-row items-center px-4 py-3 bg-red-50 border-b border-red-100">
+          <Ionicons name="alert-circle-outline" size={18} color="#EF4444" />
+          <Text className="ml-2 text-sm text-red-600 flex-1">
+            {t('locationPicker.sameCityError')}
+          </Text>
+        </View>
+      )}
 
       {/* Section header */}
       <View className="px-4 pt-4 pb-2">

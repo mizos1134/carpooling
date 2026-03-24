@@ -1,23 +1,34 @@
-import { Pressable, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../../components/layout';
+import { Button, Stepper } from '../../components/ui';
 import { RecentSearchCard } from '../../components/cards';
 import { useRideStore } from '../../store/rides';
 import type { MainNavigatorParamList, SearchStackParamList } from '../../navigation/types';
-import { CompositeNavigationProp } from '@react-navigation/native';
 
 type NavProp = CompositeNavigationProp<
   NativeStackNavigationProp<SearchStackParamList, 'SearchHome'>,
   NativeStackNavigationProp<MainNavigatorParamList>
 >;
 
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
 export default function SearchHomeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<NavProp>();
-  const { searchParams, recentSearches, swapLocations } = useRideStore();
+  const { searchParams, recentSearches, setDate, setPassengers, swapLocations } = useRideStore();
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showPassengerPicker, setShowPassengerPicker] = useState(false);
 
   const openLocationPicker = (fieldKey: 'origin' | 'destination') => {
     navigation.navigate('LocationPicker', { fieldKey });
@@ -38,6 +49,8 @@ export default function SearchHomeScreen() {
   };
 
   const isSearchReady = searchParams.origin && searchParams.destination;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   return (
     <ScreenWrapper scroll className="bg-gray-50" safeAreaClassName="bg-gray-50">
@@ -102,28 +115,37 @@ export default function SearchHomeScreen() {
           </Text>
         </Pressable>
 
-        {/* Separator */}
         <View className="mx-4 h-px bg-gray-100" />
 
-        {/* Date row */}
-        <Pressable className="flex-row items-center px-4 h-14 active:bg-gray-50">
+        {/* Date row — opens native date picker */}
+        <Pressable
+          onPress={() => setShowDatePicker(true)}
+          className="flex-row items-center px-4 h-14 active:bg-gray-50"
+        >
           <View className="w-5 items-center mr-4">
             <Ionicons name="calendar-outline" size={20} color="#9CA3AF" />
           </View>
-          <Text className="text-base text-gray-500">{t('search.today')}</Text>
+          <Text className="text-base text-gray-700 flex-1">
+            {formatDate(searchParams.date)}
+          </Text>
+          <Ionicons name="chevron-forward" size={16} color="#D1D5DB" />
         </Pressable>
 
-        {/* Separator */}
         <View className="mx-4 h-px bg-gray-100" />
 
-        {/* Passengers row */}
-        <Pressable className="flex-row items-center px-4 h-14 active:bg-gray-50">
+        {/* Passengers row — opens stepper modal */}
+        <Pressable
+          onPress={() => setShowPassengerPicker(true)}
+          className="flex-row items-center px-4 h-14 active:bg-gray-50"
+        >
           <View className="w-5 items-center mr-4">
             <Ionicons name="person-outline" size={20} color="#9CA3AF" />
           </View>
-          <Text className="text-base text-gray-500">
-            {searchParams.passengers} {searchParams.passengers === 1 ? t('search.passenger') : t('search.passengers')}
+          <Text className="text-base text-gray-700 flex-1">
+            {searchParams.passengers}{' '}
+            {searchParams.passengers === 1 ? t('search.passenger') : t('search.passengers')}
           </Text>
+          <Ionicons name="chevron-forward" size={16} color="#D1D5DB" />
         </Pressable>
 
         {/* Search Button — flush inside card */}
@@ -168,8 +190,74 @@ export default function SearchHomeScreen() {
         </View>
       )}
 
-      {/* Bottom spacing */}
       <View className="h-8" />
+
+      {/* ── Date Picker (iOS spinner inline, shown conditionally) ── */}
+      {showDatePicker && (
+        <Modal transparent animationType="slide">
+          <Pressable
+            className="flex-1 bg-black/40"
+            onPress={() => setShowDatePicker(false)}
+          />
+          <View className="bg-white rounded-t-2xl pb-6">
+            <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
+              <Text className="text-base font-semibold text-gray-900">
+                {t('search.selectDate')}
+              </Text>
+              <Pressable onPress={() => setShowDatePicker(false)}>
+                <Text className="text-base font-semibold text-primary-600">
+                  {t('search.done')}
+                </Text>
+              </Pressable>
+            </View>
+            <DateTimePicker
+              value={new Date(searchParams.date)}
+              mode="date"
+              display="spinner"
+              minimumDate={today}
+              onChange={(_, selected) => {
+                if (selected) {
+                  setDate(selected.toISOString().split('T')[0]);
+                }
+              }}
+              locale="fr-FR"
+            />
+          </View>
+        </Modal>
+      )}
+
+      {/* ── Passenger Picker modal ── */}
+      {showPassengerPicker && (
+        <Modal transparent animationType="slide">
+          <Pressable
+            className="flex-1 bg-black/40"
+            onPress={() => setShowPassengerPicker(false)}
+          />
+          <View className="bg-white rounded-t-2xl px-6 pb-10 pt-6">
+            <View className="flex-row items-center justify-between mb-8">
+              <Text className="text-base font-semibold text-gray-900">
+                {t('search.passengers')}
+              </Text>
+              <Pressable onPress={() => setShowPassengerPicker(false)}>
+                <Text className="text-base font-semibold text-primary-600">
+                  {t('search.done')}
+                </Text>
+              </Pressable>
+            </View>
+            <View className="items-center">
+              <Stepper
+                value={searchParams.passengers}
+                min={1}
+                max={8}
+                onValueChange={setPassengers}
+              />
+              <Text className="text-sm text-gray-400 mt-4">
+                {t('search.maxPassengers')}
+              </Text>
+            </View>
+          </View>
+        </Modal>
+      )}
     </ScreenWrapper>
   );
 }
