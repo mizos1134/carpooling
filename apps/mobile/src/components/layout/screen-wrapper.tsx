@@ -5,19 +5,21 @@ interface ScreenWrapperProps {
   children: React.ReactNode;
   scroll?: boolean;
   className?: string;
+  safeAreaClassName?: string;
 }
 
 export default function ScreenWrapper({
   children,
   scroll = false,
   className = '',
+  safeAreaClassName = 'bg-white',
 }: ScreenWrapperProps) {
   const content = (
     <View className={`flex-1 px-screen-x ${className}`}>{children}</View>
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+    <SafeAreaView className={`flex-1 ${safeAreaClassName}`} edges={['top']}>
       {scroll ? (
         <ScrollView
           showsVerticalScrollIndicator={false}

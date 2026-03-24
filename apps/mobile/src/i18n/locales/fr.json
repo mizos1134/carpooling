@@ -7,9 +7,11 @@
     "profile": "Profil"
   },
   "search": {
-    "title": "Où allez-vous ?",
-    "leavingFrom": "Départ de...",
-    "goingTo": "Destination...",
+    "heroLine1": "Voyagez ensemble,",
+    "heroLine2": "payez moins cher",
+    "heroSubtitle": "Trouvez un covoiturage au Maroc",
+    "leavingFrom": "Départ (ex : Casablanca)",
+    "goingTo": "Destination (ex : Rabat)",
     "today": "Aujourd'hui",
     "passenger": "passager",
     "passengers": "passagers",

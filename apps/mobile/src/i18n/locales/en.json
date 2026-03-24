@@ -7,9 +7,11 @@
     "profile": "Profile"
   },
   "search": {
-    "title": "Where are you going?",
-    "leavingFrom": "Leaving from...",
-    "goingTo": "Going to...",
+    "heroLine1": "Travel together,",
+    "heroLine2": "save money",
+    "heroSubtitle": "Find a carpool ride in Morocco",
+    "leavingFrom": "Leaving from (e.g. Casablanca)",
+    "goingTo": "Going to (e.g. Rabat)",
     "today": "Today",
     "passenger": "passenger",
     "passengers": "passengers",

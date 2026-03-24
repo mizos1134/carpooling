@@ -1,9 +1,9 @@
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenWrapper } from '../../components/layout';
-import { Button, Stepper } from '../../components/ui';
 import { RecentSearchCard } from '../../components/cards';
 import { useRideStore } from '../../store/rides';
 import type { MainNavigatorParamList } from '../../navigation/types';
@@ -13,7 +13,7 @@ type NavProp = NativeStackNavigationProp<MainNavigatorParamList>;
 export default function SearchHomeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<NavProp>();
-  const { searchParams, recentSearches, setPassengers, swapLocations } = useRideStore();
+  const { searchParams, recentSearches, swapLocations } = useRideStore();
 
   const openLocationPicker = (fieldKey: 'origin' | 'destination') => {
     navigation.navigate('LocationPicker', { fieldKey });
@@ -23,78 +23,108 @@ export default function SearchHomeScreen() {
     // TODO: Navigate to SearchResults when built in M5
   };
 
+  const isSearchReady = searchParams.origin && searchParams.destination;
+
   return (
-    <ScreenWrapper scroll>
-      <View className="pt-12 pb-6">
-        <Text className="text-2xl font-bold text-gray-900">
-          {t('search.title')}
+    <ScreenWrapper scroll className="bg-gray-50" safeAreaClassName="bg-gray-50">
+      {/* Hero header */}
+      <View className="pt-14 pb-8">
+        <Text className="text-3xl font-bold text-gray-900 leading-tight">
+          {t('search.heroLine1')}
+        </Text>
+        <Text className="text-3xl font-bold text-primary-600 leading-tight mt-1">
+          {t('search.heroLine2')}
+        </Text>
+        <Text className="text-base text-gray-500 mt-3">
+          {t('search.heroSubtitle')}
         </Text>
       </View>
 
-      {/* Search Card */}
-      <View className="bg-white rounded-card border border-gray-200 p-card shadow-sm">
-        {/* Origin */}
+      {/* Unified Search Card */}
+      <View className="bg-white rounded-2xl shadow-md overflow-hidden">
+        {/* Origin row */}
         <Pressable
           onPress={() => openLocationPicker('origin')}
-          className="flex-row items-center h-14 border-b border-gray-100"
+          className="flex-row items-center px-4 h-16 active:bg-gray-50"
         >
-          <View className="w-3 h-3 rounded-full bg-primary-500 mr-3" />
+          <View className="w-5 items-center mr-4">
+            <View className="w-3 h-3 rounded-full border-2 border-primary-500" />
+          </View>
           <Text
-            className={`text-base flex-1 ${searchParams.origin ? 'text-gray-900' : 'text-gray-400'}`}
+            className={`text-base flex-1 ${searchParams.origin ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
+            numberOfLines={1}
           >
             {searchParams.origin?.label ?? t('search.leavingFrom')}
           </Text>
         </Pressable>
 
-        {/* Swap button */}
-        <View className="absolute right-4 top-[52px] z-10">
+        {/* Divider with swap */}
+        <View className="flex-row items-center px-4">
+          <View className="w-5 items-center mr-4">
+            <View className="w-px h-4 bg-gray-200" />
+          </View>
+          <View className="flex-1 h-px bg-gray-100" />
           <Pressable
             onPress={swapLocations}
-            className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center"
+            className="ml-3 w-9 h-9 rounded-full bg-gray-50 border border-gray-200 items-center justify-center"
           >
-            <Text className="text-sm text-gray-500">⇅</Text>
+            <Ionicons name="swap-vertical" size={18} color="#6B7280" />
           </Pressable>
         </View>
 
-        {/* Destination */}
+        {/* Destination row */}
         <Pressable
           onPress={() => openLocationPicker('destination')}
-          className="flex-row items-center h-14 border-b border-gray-100"
+          className="flex-row items-center px-4 h-16 active:bg-gray-50"
         >
-          <View className="w-3 h-3 rounded-full bg-primary-800 mr-3" />
+          <View className="w-5 items-center mr-4">
+            <View className="w-3 h-3 rounded-full bg-primary-600" />
+          </View>
           <Text
-            className={`text-base flex-1 ${searchParams.destination ? 'text-gray-900' : 'text-gray-400'}`}
+            className={`text-base flex-1 ${searchParams.destination ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
+            numberOfLines={1}
           >
             {searchParams.destination?.label ?? t('search.goingTo')}
           </Text>
         </Pressable>
 
-        {/* Date + Passengers row */}
-        <View className="flex-row items-center h-14">
-          <Pressable className="flex-1 flex-row items-center">
-            <Text className="text-sm text-gray-500 mr-2">📅</Text>
-            <Text className="text-base text-gray-600">{t('search.today')}</Text>
-          </Pressable>
-          <View className="w-px h-8 bg-gray-200" />
-          <View className="flex-1 flex-row items-center justify-center">
-            <Stepper
-              value={searchParams.passengers}
-              min={1}
-              max={8}
-              onValueChange={setPassengers}
-            />
-          </View>
-        </View>
-      </View>
+        {/* Separator */}
+        <View className="mx-4 h-px bg-gray-100" />
 
-      {/* Search Button */}
-      <View className="mt-4">
-        <Button
-          label={t('search.searchButton')}
+        {/* Date row */}
+        <Pressable className="flex-row items-center px-4 h-14 active:bg-gray-50">
+          <View className="w-5 items-center mr-4">
+            <Ionicons name="calendar-outline" size={20} color="#9CA3AF" />
+          </View>
+          <Text className="text-base text-gray-500">{t('search.today')}</Text>
+        </Pressable>
+
+        {/* Separator */}
+        <View className="mx-4 h-px bg-gray-100" />
+
+        {/* Passengers row */}
+        <Pressable className="flex-row items-center px-4 h-14 active:bg-gray-50">
+          <View className="w-5 items-center mr-4">
+            <Ionicons name="person-outline" size={20} color="#9CA3AF" />
+          </View>
+          <Text className="text-base text-gray-500">
+            {searchParams.passengers} {searchParams.passengers === 1 ? t('search.passenger') : t('search.passengers')}
+          </Text>
+        </Pressable>
+
+        {/* Search Button — flush inside card */}
+        <Pressable
           onPress={handleSearch}
-          fullWidth
-          disabled={!searchParams.origin || !searchParams.destination}
-        />
+          disabled={!isSearchReady}
+          className={`
+            h-14 items-center justify-center mx-4 mb-4 mt-2 rounded-xl
+            ${isSearchReady ? 'bg-primary-600 active:bg-primary-700' : 'bg-primary-200'}
+          `}
+        >
+          <Text className="text-white text-base font-bold">
+            {t('search.searchButton')}
+          </Text>
+        </Pressable>
       </View>
 
       {/* Recent Searches */}
@@ -123,6 +153,9 @@ export default function SearchHomeScreen() {
           ))}
         </View>
       )}
+
+      {/* Bottom spacing */}
+      <View className="h-8" />
     </ScreenWrapper>
   );
 }

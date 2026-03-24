@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import type { MainTabParamList } from './types';
 
 import SearchStack from './search-stack';
@@ -11,15 +12,34 @@ import ProfileStack from './profile-stack';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-/** Simple text-based tab icon (replace with proper icons in polish phase) */
-function TabIcon({ label, focused }: { label: string; focused: boolean }) {
-  return (
-    <Text
-      className={`text-lg ${focused ? 'text-primary-600' : 'text-gray-400'}`}
-    >
-      {label}
-    </Text>
-  );
+type IoniconsName = React.ComponentProps<typeof Ionicons>['name'];
+
+interface TabIconConfig {
+  active: IoniconsName;
+  inactive: IoniconsName;
+}
+
+const TAB_ICONS: Record<string, TabIconConfig> = {
+  SearchTab: { active: 'search', inactive: 'search-outline' },
+  PublishTab: { active: 'add-circle', inactive: 'add-circle-outline' },
+  YourRidesTab: { active: 'car', inactive: 'car-outline' },
+  InboxTab: { active: 'chatbubbles', inactive: 'chatbubbles-outline' },
+  ProfileTab: { active: 'person', inactive: 'person-outline' },
+};
+
+function TabBarIcon({ routeName, focused }: { routeName: string; focused: boolean }) {
+  const config = TAB_ICONS[routeName];
+  const iconName = focused ? config.active : config.inactive;
+
+  if (focused) {
+    return (
+      <View className="bg-primary-50 rounded-full px-4 py-1.5 items-center justify-center">
+        <Ionicons name={iconName} size={22} color="#008B8B" />
+      </View>
+    );
+  }
+
+  return <Ionicons name={iconName} size={22} color="#9CA3AF" />;
 }
 
 export default function MainTabs() {
@@ -27,53 +47,50 @@ export default function MainTabs() {
 
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: { paddingBottom: 6, paddingTop: 6, height: 56 },
-        tabBarLabelStyle: { fontSize: 12 },
+        tabBarStyle: {
+          paddingBottom: 6,
+          paddingTop: 8,
+          height: 64,
+          borderTopColor: '#E5E7EB',
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '500',
+          marginTop: 2,
+        },
         tabBarActiveTintColor: '#008B8B',
         tabBarInactiveTintColor: '#9CA3AF',
-      }}
+        tabBarIcon: ({ focused }) => (
+          <TabBarIcon routeName={route.name} focused={focused} />
+        ),
+      })}
     >
       <Tab.Screen
         name="SearchTab"
         component={SearchStack}
-        options={{
-          tabBarLabel: t('tabs.search'),
-          tabBarIcon: ({ focused }) => <TabIcon label="🔍" focused={focused} />,
-        }}
+        options={{ tabBarLabel: t('tabs.search') }}
       />
       <Tab.Screen
         name="PublishTab"
         component={PublishStack}
-        options={{
-          tabBarLabel: t('tabs.publish'),
-          tabBarIcon: ({ focused }) => <TabIcon label="＋" focused={focused} />,
-        }}
+        options={{ tabBarLabel: t('tabs.publish') }}
       />
       <Tab.Screen
         name="YourRidesTab"
         component={YourRidesStack}
-        options={{
-          tabBarLabel: t('tabs.yourRides'),
-          tabBarIcon: ({ focused }) => <TabIcon label="🚗" focused={focused} />,
-        }}
+        options={{ tabBarLabel: t('tabs.yourRides') }}
       />
       <Tab.Screen
         name="InboxTab"
         component={InboxStack}
-        options={{
-          tabBarLabel: t('tabs.inbox'),
-          tabBarIcon: ({ focused }) => <TabIcon label="💬" focused={focused} />,
-        }}
+        options={{ tabBarLabel: t('tabs.inbox') }}
       />
       <Tab.Screen
         name="ProfileTab"
         component={ProfileStack}
-        options={{
-          tabBarLabel: t('tabs.profile'),
-          tabBarIcon: ({ focused }) => <TabIcon label="👤" focused={focused} />,
-        }}
+        options={{ tabBarLabel: t('tabs.profile') }}
       />
     </Tab.Navigator>
   );
