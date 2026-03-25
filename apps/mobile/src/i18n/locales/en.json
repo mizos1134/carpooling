@@ -1,1 +1,83 @@
-{}
+{
+  "tabs": {
+    "search": "Search",
+    "publish": "Publish",
+    "yourRides": "Your rides",
+    "inbox": "Inbox",
+    "profile": "Profile"
+  },
+  "search": {
+    "heroLine1": "Travel together,",
+    "heroLine2": "save money",
+    "heroSubtitle": "Find a carpool ride in Morocco",
+    "leavingFrom": "Leaving from (e.g. Casablanca)",
+    "goingTo": "Going to (e.g. Rabat)",
+    "today": "Today",
+    "passenger": "passenger",
+    "passengers": "passengers",
+    "searchButton": "Search",
+    "recentSearches": "Recent searches",
+    "noRecentSearches": "No recent searches",
+    "selectDate": "Select a date",
+    "done": "Done",
+    "maxPassengers": "Maximum 8 passengers"
+  },
+  "locationPicker": {
+    "searchPlaceholder": "Search for a city...",
+    "clear": "Clear",
+    "popularCities": "Popular cities",
+    "results": "Results",
+    "noResults": "No results found",
+    "sameCityError": "Departure and destination cannot be the same"
+  },
+  "rides": {
+    "searchResults": "Results",
+    "noRidesFound": "No rides found",
+    "noRidesFoundSubtitle": "Try a different date or destination",
+    "sortDeparture": "Departure",
+    "sortPrice": "Price",
+    "sortRating": "Rating",
+    "seatsLeft": "seat left",
+    "seatsLeftPlural": "seats left",
+    "perSeat": "/ seat"
+  },
+  "rideDetail": {
+    "seatsAvailable": "seats available",
+    "memberSince": "Member since",
+    "verified": "Phone verified",
+    "smoking": "Smoking",
+    "noSmoking": "No smoking",
+    "music": "Music",
+    "noMusic": "No music",
+    "chatLoveTo": "Loves to chat",
+    "chatSometimes": "Sometimes",
+    "chatSilent": "Silent",
+    "book": "Book"
+  },
+  "booking": {
+    "confirmTitle": "Confirm booking",
+    "pickupPoint": "Pickup point",
+    "dropoffPoint": "Drop-off point",
+    "seats": "Number of seats",
+    "priceBreakdown": "Price breakdown",
+    "total": "Total",
+    "paymentCash": "Cash — Pay directly to the driver",
+    "confirmButton": "Confirm booking",
+    "successTitle": "Request sent!",
+    "successSubtitle": "The driver must confirm your booking.",
+    "viewBooking": "View my booking",
+    "backToSearch": "Back to search"
+  },
+  "profile": {
+    "unnamed": "User",
+    "account": "Account",
+    "editProfile": "Edit profile",
+    "driverProfile": "Driver profile",
+    "myVehicles": "My vehicles",
+    "activity": "Activity",
+    "myReviews": "My reviews",
+    "settings": "Settings",
+    "settingsPage": "Settings",
+    "logout": "Log out"
+  }
+}

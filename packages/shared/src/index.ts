@@ -1,4 +1,10 @@
-// Shared TypeScript types and Zod schemas
-// Will be populated as features are built
-
-export {};
+export * from './types/common';
+export * from './types/user';
+export * from './types/ride';
+export * from './types/booking';
+export * from './types/review';
+export * from './types/chat';
+export * from './types/notification';
+export * from './types/report';
+export * from './schemas/auth';
+export * from './schemas/user';

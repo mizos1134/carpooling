@@ -19,7 +19,7 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false, // React already escapes
   },
-  compatibilityJSON: 'v4',
+  compatibilityJSON: 'v3',
 });
 
 // Enable RTL layout for Arabic

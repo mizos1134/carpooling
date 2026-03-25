@@ -1,1 +1,83 @@
-{}
+{
+  "tabs": {
+    "search": "بحث",
+    "publish": "نشر",
+    "yourRides": "رحلاتك",
+    "inbox": "البريد",
+    "profile": "الملف"
+  },
+  "search": {
+    "heroLine1": "سافروا معًا،",
+    "heroLine2": "وفّروا أكثر",
+    "heroSubtitle": "ابحث عن رحلة مشتركة في المغرب",
+    "leavingFrom": "الانطلاق من (مثال: الدار البيضاء)",
+    "goingTo": "الوجهة (مثال: الرباط)",
+    "today": "اليوم",
+    "passenger": "راكب",
+    "passengers": "ركاب",
+    "searchButton": "بحث",
+    "recentSearches": "عمليات البحث الأخيرة",
+    "noRecentSearches": "لا توجد عمليات بحث حديثة",
+    "selectDate": "اختر تاريخًا",
+    "done": "تم",
+    "maxPassengers": "الحد الأقصى 8 ركاب"
+  },
+  "locationPicker": {
+    "searchPlaceholder": "ابحث عن مدينة...",
+    "clear": "مسح",
+    "popularCities": "المدن الشائعة",
+    "results": "النتائج",
+    "noResults": "لا توجد نتائج",
+    "sameCityError": "لا يمكن أن يكون الانطلاق والوجهة متماثلين"
+  },
+  "rides": {
+    "searchResults": "النتائج",
+    "noRidesFound": "لا توجد رحلات",
+    "noRidesFoundSubtitle": "جرّب تاريخًا أو وجهة مختلفة",
+    "sortDeparture": "المغادرة",
+    "sortPrice": "السعر",
+    "sortRating": "التقييم",
+    "seatsLeft": "مقعد متبقي",
+    "seatsLeftPlural": "مقاعد متبقية",
+    "perSeat": "/ مقعد"
+  },
+  "rideDetail": {
+    "seatsAvailable": "مقاعد متاحة",
+    "memberSince": "عضو منذ",
+    "verified": "الهاتف موثّق",
+    "smoking": "التدخين مسموح",
+    "noSmoking": "ممنوع التدخين",
+    "music": "الموسيقى",
+    "noMusic": "بدون موسيقى",
+    "chatLoveTo": "يحب الحديث",
+    "chatSometimes": "أحيانًا",
+    "chatSilent": "صامت",
+    "book": "احجز"
+  },
+  "booking": {
+    "confirmTitle": "تأكيد الحجز",
+    "pickupPoint": "نقطة الانطلاق",
+    "dropoffPoint": "نقطة الوصول",
+    "seats": "عدد المقاعد",
+    "priceBreakdown": "تفاصيل السعر",
+    "total": "المجموع",
+    "paymentCash": "نقدًا — ادفع مباشرةً للسائق",
+    "confirmButton": "تأكيد الحجز",
+    "successTitle": "تم إرسال الطلب!",
+    "successSubtitle": "يجب على السائق تأكيد حجزك.",
+    "viewBooking": "عرض حجزي",
+    "backToSearch": "العودة إلى البحث"
+  },
+  "profile": {
+    "unnamed": "مستخدم",
+    "account": "الحساب",
+    "editProfile": "تعديل الملف الشخصي",
+    "driverProfile": "ملف السائق",
+    "myVehicles": "مركباتي",
+    "activity": "النشاط",
+    "myReviews": "تقييماتي",
+    "settings": "الإعدادات",
+    "settingsPage": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  }
+}

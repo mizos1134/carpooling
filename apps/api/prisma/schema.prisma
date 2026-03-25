@@ -135,7 +135,6 @@ model User {
   phone                 String    @unique @db.VarChar(20)
   firstName             String    @db.VarChar(50)
   lastName              String    @db.VarChar(50)
-  fullName              String    @db.VarChar(100)
   avatarUrl             String?
   gender                Gender?
   bio                   String?
